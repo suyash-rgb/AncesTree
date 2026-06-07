@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Astrolabe from "@/components/Astrolabe";
-import CanopyCanvas from "@/components/CanopyCanvas";
-import ChronicleDrawer from "@/components/ChronicleDrawer";
+import Astrolabe from "@/components/Astrolabe/Astrolabe";
+import CanopyCanvas from "@/components/CanopyCanvas/CanopyCanvas";
+import ChronicleDrawer from "@/components/ChronicleDrawer/ChronicleDrawer";
 
 export default function Home() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -19,7 +19,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <main>
       <Astrolabe />
       <CanopyCanvas onCommitClick={handleCommitClick} />
       <ChronicleDrawer
@@ -27,6 +27,6 @@ export default function Home() {
         commitData={selectedCommit}
         onClose={handleCloseDrawer}
       />
-    </div>
+    </main>
   );
 }

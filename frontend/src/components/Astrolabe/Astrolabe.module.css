@@ -1,0 +1,119 @@
+.astrolabe {
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.brand {
+  display: inline-block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  vertical-align: middle;
+  margin: 0 24px 0 0;
+  user-select: none;
+}
+
+.brand::before {
+  content: "❦ ";
+  color: var(--border);
+  margin-right: 4px;
+}
+
+.brand::after {
+  content: " ❦";
+  color: var(--border);
+  margin-left: 4px;
+}
+
+.ingestGroup {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 24px;
+}
+
+.ingestLabel {
+  display: block;
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 11px;
+  color: var(--stone);
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.ingestInput {
+  background: var(--canvas);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--gold);
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 13px;
+  padding: 6px 10px;
+  width: 320px;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.ingestInput::placeholder {
+  color: var(--stone);
+  font-style: italic;
+}
+
+.ingestInput:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1px var(--gold), inset 0 0 8px rgba(207, 175, 99, 0.1);
+}
+
+.controls {
+  display: inline-block;
+  vertical-align: middle;
+  float: right;
+  margin-top: 18px;
+}
+
+.tokenToggle {
+  display: inline-block;
+  font-family: Georgia, serif;
+  font-size: 12px;
+  color: var(--stone);
+  margin-right: 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tokenToggle input {
+  accent-color: var(--gold);
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.syncButton {
+  background: var(--gold);
+  border: none;
+  color: var(--canvas);
+  font-family: Georgia, serif;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 160ms ease, transform 100ms ease;
+  box-shadow: 0 0 0 1px rgba(13, 19, 16, 0.4), 0 0 12px rgba(207, 175, 99, 0.15);
+}
+
+.syncButton:hover {
+  background: #d9bc75;
+  box-shadow: 0 0 0 1px rgba(13, 19, 16, 0.4), 0 0 18px rgba(207, 175, 99, 0.4);
+}
+
+.syncButton:active {
+  transform: translateY(1px);
+}

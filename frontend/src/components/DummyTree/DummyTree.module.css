@@ -1,0 +1,105 @@
+.canvas {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--canvas);
+  overflow: visible;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.branchHeader {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-anchor: middle;
+}
+
+.branchUnderline {
+  stroke-width: 0.5;
+  fill: none;
+}
+
+.vine {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mergeVine {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.2;
+  stroke-dasharray: 5 4;
+  stroke-opacity: 0.7;
+  stroke-linecap: round;
+}
+
+.commitNode {
+  cursor: pointer;
+  transition: transform 180ms ease;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.commitNode:hover {
+  transform: scale(1.6);
+}
+
+.commitNode:hover .commitTooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.commitTooltip {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 180ms ease, transform 180ms ease;
+  pointer-events: none;
+}
+
+.commitHash {
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  fill: var(--linen);
+}
+
+.mergeNode {
+  cursor: pointer;
+  animation: goldPulse 2.4s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+  transition: transform 200ms ease;
+}
+
+.mergeNode:hover {
+  transform: scale(1.4);
+  animation-duration: 1.2s;
+}
+
+.legend {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 10px;
+  fill: var(--stone);
+  text-anchor: middle;
+  letter-spacing: 0.5px;
+}
+
+.subtitle {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 9px;
+  fill: var(--stone);
+  text-anchor: middle;
+  letter-spacing: 1px;
+}

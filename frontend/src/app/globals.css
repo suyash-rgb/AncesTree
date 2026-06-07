@@ -1,80 +1,43 @@
 @import "tailwindcss";
 
 :root {
-  --color-canvas: #0D1310;
-  --color-panel: #131D18;
-  --color-border: #23362C;
-  --color-gold: #CFAF63;
-  --color-body: #D1DCD6;
-  --color-muted: #5C7065;
+  --canvas: #0D1310;
+  --panel: #131D18;
+  --border: #23362C;
+  --gold: #CFAF63;
+  --linen: #D1DCD6;
+  --stone: #5C7065;
+  --snippet-bg: #17221C;
 
-  --color-emerald: #2E8B57;
-  --color-sky: #4682B4;
-  --color-autumn: #CD853F;
-  --color-amber: #B8860B;
-  --color-crimson: #8B0000;
-
-  --font-serif: Georgia, "Times New Roman", serif;
-  --font-fira: var(--font-fira-code), "Courier New", monospace;
+  --emerald: #2E8B57;
+  --sky: #4682B4;
+  --autumn: #CD853F;
+  --amber: #B8860B;
+  --crimson: #8B0000;
 }
 
-@theme inline {
-  --color-canvas: #0D1310;
-  --color-panel: #131D18;
-  --color-border: #23362C;
-  --color-gold: #CFAF63;
-  --color-body: #D1DCD6;
-  --color-muted: #5C7065;
-  --color-emerald: #2E8B57;
-  --color-sky: #4682B4;
-  --color-autumn: #CD853F;
-  --color-amber: #B8860B;
-  --color-crimson: #8B0000;
-  --font-serif: Georgia, "Times New Roman", serif;
-  --font-mono: var(--font-fira-code), "Courier New", monospace;
-}
-
+html,
 body {
-  background: var(--color-canvas);
-  color: var(--color-body);
-  font-family: var(--font-serif);
+  margin: 0;
+  padding: 0;
+  background: var(--canvas);
+  color: var(--linen);
+  font-family: Georgia, "Times New Roman", serif;
+  min-height: 100%;
 }
 
-.text-title {
-  font-family: var(--font-serif);
-  font-size: 24px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--color-gold);
+* {
+  box-sizing: border-box;
 }
 
-.text-section {
-  font-family: var(--font-serif);
-  font-size: 16px;
-  color: var(--color-gold);
-}
-
-.text-panel {
-  font-family: var(--font-serif);
-  font-size: 12.5px;
-  font-style: italic;
-  color: var(--color-body);
-}
-
-.text-data {
-  font-family: var(--font-fira);
-  font-size: 9.5px;
-  font-weight: 700;
-}
-
-.text-snippet {
-  font-family: var(--font-fira);
-  font-size: 9px;
-  background: #17221C;
-}
-
-.ui-corner-accent {
-  width: 40px;
-  height: 40px;
-  position: absolute;
+@keyframes goldPulse {
+  0% {
+    filter: drop-shadow(0 0 2px var(--gold)) drop-shadow(0 0 4px var(--gold));
+  }
+  50% {
+    filter: drop-shadow(0 0 6px var(--gold)) drop-shadow(0 0 12px rgba(207, 175, 99, 0.6));
+  }
+  100% {
+    filter: drop-shadow(0 0 2px var(--gold)) drop-shadow(0 0 4px var(--gold));
+  }
 }

@@ -1,0 +1,139 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 19, 16, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 360px;
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  z-index: 50;
+  transform: translateX(100%);
+  transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.5), inset 1px 0 0 rgba(207, 175, 99, 0.15);
+}
+
+.drawerOpen {
+  transform: translateX(0);
+}
+
+.drawerHeader {
+  position: relative;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.drawerTitle {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  color: var(--gold);
+  margin: 0 0 4px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.drawerSubtitle {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 11px;
+  color: var(--stone);
+  letter-spacing: 0.5px;
+}
+
+.drawerClose {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--stone);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.drawerClose:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.drawerBody {
+  padding: 24px;
+  height: calc(100% - 73px);
+  overflow-y: auto;
+}
+
+.emptyState {
+  text-align: center;
+  color: var(--stone);
+  font-style: italic;
+  font-size: 13px;
+  margin-top: 64px;
+  font-family: Georgia, serif;
+  letter-spacing: 0.3px;
+}
+
+.section {
+  display: block;
+  margin-bottom: 28px;
+}
+
+.sectionTitle {
+  font-family: Georgia, serif;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--linen);
+  margin: 0 0 10px;
+  letter-spacing: 0.5px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.hash {
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.message {
+  font-family: "Fira Code", monospace;
+  font-size: 11px;
+  color: var(--linen);
+  display: block;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.meta {
+  font-family: "Fira Code", monospace;
+  font-size: 10px;
+  color: var(--stone);
+  display: block;
+  margin-top: 4px;
+}
+
+.emptyDash {
+  font-family: Georgia, serif;
+  font-style: italic;
+  color: var(--stone);
+  font-size: 11px;
+}

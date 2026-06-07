@@ -1,0 +1,85 @@
+.corner {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tl {
+  top: 0;
+  left: 0;
+  border-top: 1px solid rgba(207, 175, 99, 0.55);
+  border-left: 1px solid rgba(207, 175, 99, 0.55);
+  border-top-left-radius: 14px;
+  box-shadow:
+    inset 4px 4px 0 -2px rgba(207, 175, 99, 0.18),
+    -2px -2px 8px -2px rgba(207, 175, 99, 0.2),
+    -6px -6px 18px -8px rgba(207, 175, 99, 0.15);
+}
+
+.tr {
+  top: 0;
+  right: 0;
+  border-top: 1px solid rgba(207, 175, 99, 0.55);
+  border-right: 1px solid rgba(207, 175, 99, 0.55);
+  border-top-right-radius: 14px;
+  box-shadow:
+    inset -4px 4px 0 -2px rgba(207, 175, 99, 0.18),
+    2px -2px 8px -2px rgba(207, 175, 99, 0.2),
+    6px -6px 18px -8px rgba(207, 175, 99, 0.15);
+}
+
+.bl {
+  bottom: 0;
+  left: 0;
+  border-bottom: 1px solid rgba(207, 175, 99, 0.55);
+  border-left: 1px solid rgba(207, 175, 99, 0.55);
+  border-bottom-left-radius: 14px;
+  box-shadow:
+    inset 4px -4px 0 -2px rgba(207, 175, 99, 0.18),
+    -2px 2px 8px -2px rgba(207, 175, 99, 0.2),
+    -6px 6px 18px -8px rgba(207, 175, 99, 0.15);
+}
+
+.br {
+  bottom: 0;
+  right: 0;
+  border-bottom: 1px solid rgba(207, 175, 99, 0.55);
+  border-right: 1px solid rgba(207, 175, 99, 0.55);
+  border-bottom-right-radius: 14px;
+  box-shadow:
+    inset -4px -4px 0 -2px rgba(207, 175, 99, 0.18),
+    2px 2px 8px -2px rgba(207, 175, 99, 0.2),
+    6px 6px 18px -8px rgba(207, 175, 99, 0.15);
+}
+
+.vine {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(207, 175, 99, 0.35);
+  border-radius: 50% 0 50% 0;
+  transform: rotate(45deg);
+  opacity: 0.6;
+}
+
+.tl .vine {
+  top: 6px;
+  left: 6px;
+}
+
+.tr .vine {
+  top: 6px;
+  right: 6px;
+}
+
+.bl .vine {
+  bottom: 6px;
+  left: 6px;
+}
+
+.br .vine {
+  bottom: 6px;
+  right: 6px;
+}

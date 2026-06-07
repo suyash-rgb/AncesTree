@@ -1,19 +1,20 @@
 "use client";
 
-import CornerAccent from "./CornerAccent";
-import DummyTree from "./DummyTree";
+import CornerAccent from "../CornerAccent/CornerAccent";
+import DummyTree from "../DummyTree/DummyTree";
+import styles from "./CanopyCanvas.module.css";
 
 export default function CanopyCanvas({ onCommitClick }) {
   return (
-    <div className="relative flex-1 overflow-auto bg-canvas">
+    <section className={styles.canvas}>
       <CornerAccent position="top-left" />
       <CornerAccent position="top-right" />
       <CornerAccent position="bottom-left" />
       <CornerAccent position="bottom-right" />
 
-      <div className="min-h-full p-8">
+      <div className={styles.tree}>
         <DummyTree onCommitClick={onCommitClick} />
       </div>
-    </div>
+    </section>
   );
 }
