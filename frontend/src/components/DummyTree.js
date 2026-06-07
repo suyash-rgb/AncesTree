@@ -37,11 +37,25 @@ function lastCommitOnBranch(branchId, beforeY) {
   return COMMITS.filter((c) => c.branch === branchId && c.y < beforeY).sort((a, b) => b.y - a.y)[0];
 }
 
+function seededRandom(seed) {
+  let s = seed;
+  return function () {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+}
+
 export default function DummyTree({ onCommitClick }) {
   const starPositions = useMemo(() => {
+    const rand = seededRandom(424242);
     const pts = [];
     for (let i = 0; i < 100; i++) {
-      pts.push({ x: Math.random() * 800, y: Math.random() * 1000, r: Math.random() * 0.8 + 0.3 });
+      pts.push({
+        x: rand() * 800,
+        y: rand() * 1000,
+        r: rand() * 0.8 + 0.3,
+        opacity: 0.3 + rand() * 0.3,
+      });
     }
     return pts;
   }, []);
@@ -95,7 +109,7 @@ export default function DummyTree({ onCommitClick }) {
       <rect width="800" height="1000" fill="url(#bg-grid)" />
 
       {starPositions.map((s, i) => (
-        <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#5C7065" opacity={0.3 + Math.random() * 0.3} />
+        <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#5C7065" opacity={s.opacity} />
       ))}
 
       <g stroke="#23362C" strokeWidth="1" strokeOpacity="0.4">
