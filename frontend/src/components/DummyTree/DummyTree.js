@@ -80,12 +80,44 @@ export default function DummyTree({ onCommitClick }) {
 
   const backgroundStars = useMemo(() => {
     const rand = seededRandom(7777);
-    return Array.from({ length: 60 }, () => ({
+    return Array.from({ length: 50 }, () => ({
       x: rand() * 840,
       y: rand() * 1000,
-      r: rand() * 0.7 + 0.3,
-      o: 0.2 + rand() * 0.3,
+      r: rand() * 0.8 + 0.3,
+      o: 0.25 + rand() * 0.4,
     }));
+  }, []);
+
+  const waterfallDroplets = useMemo(() => {
+    const rand = seededRandom(3333);
+    return Array.from({ length: 24 }, () => ({
+      x: 760 + rand() * 50,
+      y: rand() * 1000,
+      r: rand() * 1.2 + 0.4,
+      delay: rand() * 6,
+      o: 0.5 + rand() * 0.5,
+    }));
+  }, []);
+
+  const dustMotes = useMemo(() => {
+    const rand = seededRandom(5555);
+    return Array.from({ length: 35 }, () => ({
+      x: rand() * 840,
+      y: rand() * 1000,
+      r: rand() * 1 + 0.3,
+      delay: rand() * 6,
+    }));
+  }, []);
+
+  const godRays = useMemo(() => {
+    const rand = seededRandom(8888);
+    return [
+      { x: 80, w: 90, delay: 0, o: 0.18 },
+      { x: 220, w: 70, delay: 1.5, o: 0.22 },
+      { x: 360, w: 110, delay: 0.8, o: 0.16 },
+      { x: 540, w: 80, delay: 2.2, o: 0.2 },
+      { x: 660, w: 95, delay: 1.0, o: 0.18 },
+    ];
   }, []);
 
   const rootTendrils = useMemo(() => {
@@ -131,31 +163,75 @@ export default function DummyTree({ onCommitClick }) {
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
+          <linearGradient id="sky-gradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#1f3a4d" stopOpacity="0.95" />
+            <stop offset="35%" stopColor="#15282f" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#0D1310" stopOpacity="1" />
+          </linearGradient>
+
+          <radialGradient id="moonlight" cx="50%" cy="0%" r="80%">
+            <stop offset="0%" stopColor="#E8DDA8" stopOpacity="0.55" />
+            <stop offset="25%" stopColor="#CFAF63" stopOpacity="0.18" />
+            <stop offset="60%" stopColor="#0D1310" stopOpacity="0" />
+            <stop offset="100%" stopColor="#0D1310" stopOpacity="0" />
+          </radialGradient>
+
+          <radialGradient id="mist-bottom" cx="50%" cy="100%" r="70%">
+            <stop offset="0%" stopColor="#B8C4C8" stopOpacity="0.18" />
+            <stop offset="50%" stopColor="#2C3D44" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="#0D1310" stopOpacity="0" />
+          </radialGradient>
+
+          <linearGradient id="ray-gradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#F5DC9C" stopOpacity="0.7" />
+            <stop offset="50%" stopColor="#CFAF63" stopOpacity="0.25" />
+            <stop offset="100%" stopColor="#0D1310" stopOpacity="0" />
+          </linearGradient>
+
+          <linearGradient id="aurora-grad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#4682B4" stopOpacity="0" />
+            <stop offset="30%" stopColor="#7FD3C3" stopOpacity="0.45" />
+            <stop offset="55%" stopColor="#CFAF63" stopOpacity="0.35" />
+            <stop offset="80%" stopColor="#7FD3C3" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#4682B4" stopOpacity="0" />
+          </linearGradient>
+
+          <linearGradient id="waterfall-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#E8F4F8" stopOpacity="0.05" />
+            <stop offset="50%" stopColor="#9FBAC4" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="#3D5A66" stopOpacity="0.35" />
+          </linearGradient>
+
           {BRANCHES.map((b) => (
             <radialGradient key={b.id} id={`node-${b.id}`} cx="40%" cy="35%" r="65%">
-              <stop offset="0%" stopColor={b.color} stopOpacity="0.95" />
-              <stop offset="100%" stopColor={b.color} stopOpacity="0.55" />
+              <stop offset="0%" stopColor={b.color} stopOpacity="1" />
+              <stop offset="60%" stopColor={b.color} stopOpacity="0.9" />
+              <stop offset="100%" stopColor={b.color} stopOpacity="0.7" />
+            </radialGradient>
+          ))}
+
+          {BRANCHES.map((b) => (
+            <radialGradient key={`halo-${b.id}`} id={`halo-${b.id}`} cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor={b.color} stopOpacity="0.8" />
+              <stop offset="40%" stopColor={b.color} stopOpacity="0.35" />
+              <stop offset="100%" stopColor={b.color} stopOpacity="0" />
             </radialGradient>
           ))}
 
           <radialGradient id="merge-gold" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#F5DC9C" />
-            <stop offset="60%" stopColor="#CFAF63" />
+            <stop offset="0%" stopColor="#FFF1B8" />
+            <stop offset="50%" stopColor="#F5DC9C" />
             <stop offset="100%" stopColor="#8B7038" />
           </radialGradient>
 
-          <pattern id="bg-vines" width="120" height="120" patternUnits="userSpaceOnUse">
-            <path
-              d="M 0 60 Q 30 40 60 60 T 120 60"
-              fill="none"
-              stroke="#23362C"
-              strokeWidth="0.4"
-              strokeOpacity="0.18"
-            />
-          </pattern>
+          <radialGradient id="merge-gold-halo" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFF1B8" stopOpacity="0.9" />
+            <stop offset="50%" stopColor="#CFAF63" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="#CFAF63" stopOpacity="0" />
+          </radialGradient>
 
-          <filter id="soft-glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="1.8" result="blur" />
+          <filter id="vine-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2.5" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
@@ -163,17 +239,76 @@ export default function DummyTree({ onCommitClick }) {
           </filter>
         </defs>
 
-        <rect width="840" height="1000" fill="url(#bg-vines)" />
+        <rect width="840" height="1000" fill="url(#sky-gradient)" />
+        <rect width="840" height="1000" fill="url(#moonlight)" />
+        <rect width="840" height="1000" fill="url(#mist-bottom)" />
 
-        {backgroundStars.map((s, i) => (
-          <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#5C7065" opacity={s.o} />
+        {godRays.map((ray, i) => (
+          <g key={`ray-${i}`} className={styles.godRay} style={{ animationDelay: `${ray.delay}s` }}>
+            <polygon
+              points={`${ray.x},0 ${ray.x + ray.w},0 ${ray.x + ray.w + 30},1000 ${ray.x - 30},1000`}
+              fill="url(#ray-gradient)"
+              opacity={ray.o}
+            />
+          </g>
         ))}
 
-        <line x1="0" y1="60" x2="840" y2="60" stroke="#23362C" strokeWidth="0.6" strokeOpacity="0.5" />
-        <line x1="0" y1="950" x2="840" y2="950" stroke="#23362C" strokeWidth="0.6" strokeOpacity="0.5" />
+        <g className={styles.auroraWave}>
+          <ellipse
+            cx="420"
+            cy="20"
+            rx="500"
+            ry="60"
+            fill="url(#aurora-grad)"
+            opacity="0.35"
+          />
+        </g>
+
+        {backgroundStars.map((s, i) => (
+          <circle
+            key={i}
+            cx={s.x}
+            cy={s.y}
+            r={s.r}
+            fill={s.y < 400 ? "#E8DDA8" : "#5C7065"}
+            opacity={s.o}
+          />
+        ))}
+
+        <g>
+          <rect x="755" y="0" width="50" height="1000" fill="url(#waterfall-grad)" opacity="0.6" />
+          {waterfallDroplets.map((d, i) => (
+            <circle
+              key={`drop-${i}`}
+              cx={d.x}
+              cy={d.y}
+              r={d.r}
+              fill="#E8F4F8"
+              opacity={d.o}
+              className={styles.waterfallMote}
+              style={{ animationDelay: `${d.delay}s` }}
+            />
+          ))}
+        </g>
+
+        {dustMotes.map((m, i) => (
+          <circle
+            key={`mote-${i}`}
+            cx={m.x}
+            cy={m.y}
+            r={m.r}
+            fill="#E8DDA8"
+            opacity="0.5"
+            className={styles.waterfallMote}
+            style={{ animationDelay: `${m.delay}s` }}
+          />
+        ))}
+
+        <line x1="0" y1="60" x2="840" y2="60" stroke="#CFAF63" strokeWidth="0.6" strokeOpacity="0.35" />
+        <line x1="0" y1="950" x2="840" y2="950" stroke="#CFAF63" strokeWidth="0.6" strokeOpacity="0.35" />
 
         <text x="420" y="40" className={styles.subtitle}>
-          ▲ Lineage Traced ▼
+          ☼  Lineage of Imladris  ☼
         </text>
 
         {BRANCHES.map((b) => (
@@ -187,8 +322,8 @@ export default function DummyTree({ onCommitClick }) {
               x2={b.x + 32}
               y2={92}
               stroke={b.color}
-              strokeWidth="0.6"
-              strokeOpacity="0.4"
+              strokeWidth="0.8"
+              strokeOpacity="0.7"
             />
           </g>
         ))}
@@ -202,11 +337,11 @@ export default function DummyTree({ onCommitClick }) {
                 d={d}
                 className={styles.vine}
                 stroke={b.color}
-                strokeWidth="4"
-                strokeOpacity="0.12"
-                filter="url(#soft-glow)"
+                strokeWidth="5"
+                strokeOpacity="0.2"
+                filter="url(#vine-glow)"
               />
-              <path d={d} className={styles.vine} stroke={b.color} strokeWidth="1.5" strokeOpacity="0.75" />
+              <path d={d} className={styles.vine} stroke={b.color} strokeWidth="1.6" strokeOpacity="0.9" />
             </g>
           );
         })}
@@ -223,9 +358,9 @@ export default function DummyTree({ onCommitClick }) {
               <path
                 d={d}
                 className={styles.mergeVine}
-                strokeWidth="3"
-                strokeOpacity="0.15"
-                filter="url(#soft-glow)"
+                strokeWidth="4"
+                strokeOpacity="0.18"
+                filter="url(#vine-glow)"
               />
               <path d={d} className={styles.mergeVine} />
             </g>
@@ -239,46 +374,141 @@ export default function DummyTree({ onCommitClick }) {
           const isMerge = c.merge;
           const isHovered = hovered === c.id;
 
-          return (
-            <g
-              key={c.id}
-              className={isMerge ? styles.mergeNode : styles.commitNode}
-              onClick={() => handleClick(c)}
-              onMouseEnter={() => handleEnter(c.id)}
-              onMouseLeave={handleLeave}
-            >
-              {isMerge ? (
-                <>
-                  <path
-                    d={leafPath(cx, c.y, 7)}
-                    fill="url(#merge-gold)"
-                    stroke="#F5DC9C"
-                    strokeWidth="0.6"
-                  />
-                  <line
-                    x1={cx}
-                    y1={c.y - 6}
-                    x2={cx}
-                    y2={c.y + 6}
-                    stroke="#0D1310"
-                    strokeWidth="0.5"
-                    strokeOpacity="0.6"
-                  />
-                </>
-              ) : (
-                <>
-                  <circle cx={cx} cy={c.y} r="5" fill="url(#node-{b.id})" />
-                  <circle cx={cx} cy={c.y} r="5" fill={`url(#node-${b.id})`} stroke="#D1DCD6" strokeWidth="0.8" />
-                  <circle cx={cx} cy={c.y} r="1.5" fill="#0D1310" />
-                </>
-              )}
+          if (isMerge) {
+            return (
+              <g key={c.id}>
+                <circle
+                  cx={cx}
+                  cy={c.y}
+                  r="16"
+                  fill={`url(#merge-gold-halo)`}
+                  className={styles.mergeGlow}
+                  opacity="0.5"
+                />
+                <path
+                  d={leafPath(cx, c.y, 8)}
+                  fill="url(#merge-gold)"
+                  stroke="#FFF1B8"
+                  strokeWidth="1"
+                  className={styles.mergeNode}
+                />
+                <line
+                  x1={cx}
+                  y1={c.y - 6}
+                  x2={cx}
+                  y2={c.y + 6}
+                  stroke="#0D1310"
+                  strokeWidth="0.6"
+                  strokeOpacity="0.7"
+                  pointerEvents="none"
+                />
+                <text
+                  x={cx + 14}
+                  y={c.y + 3.5}
+                  className={styles.commitHash}
+                  style={{ fill: "#CFAF63" }}
+                >
+                  {c.hash}
+                </text>
+                <circle
+                  cx={cx}
+                  cy={c.y}
+                  r="16"
+                  fill="transparent"
+                  className={styles.mergeHit}
+                  onClick={() => handleClick(c)}
+                  onMouseEnter={() => handleEnter(c.id)}
+                  onMouseLeave={handleLeave}
+                />
+                {isHovered && (
+                  <g
+                    className={styles.commitTooltip}
+                    transform={`translate(${cx + 70}, ${c.y - 28})`}
+                  >
+                    <rect
+                      x="0"
+                      y="0"
+                      width="180"
+                      height="44"
+                      rx="2"
+                      fill="#131D18"
+                      stroke="#CFAF63"
+                      strokeOpacity="0.7"
+                      strokeWidth="0.6"
+                    />
+                    <text
+                      x="8"
+                      y="14"
+                      fontSize="9"
+                      fontFamily="'Fira Code', monospace"
+                      fill="#CFAF63"
+                    >
+                      ⚜ {c.hash}
+                    </text>
+                    <text
+                      x="8"
+                      y="27"
+                      fontSize="8"
+                      fontFamily="Georgia, serif"
+                      fontStyle="italic"
+                      fill="#D1DCD6"
+                    >
+                      {c.msg.length > 30 ? c.msg.slice(0, 28) + "…" : c.msg}
+                    </text>
+                    <text
+                      x="8"
+                      y="39"
+                      fontSize="7"
+                      fontFamily="'Fira Code', monospace"
+                      fill="#5C7065"
+                    >
+                      graft · by {c.author}
+                    </text>
+                  </g>
+                )}
+              </g>
+            );
+          }
 
+          return (
+            <g key={c.id}>
+              <circle
+                cx={cx}
+                cy={c.y}
+                r="14"
+                fill={`url(#halo-${b.id})`}
+                className={styles.commitHalo}
+                opacity="0"
+              />
+              <circle
+                cx={cx}
+                cy={c.y}
+                r="5.5"
+                fill={`url(#node-${b.id})`}
+                stroke="#D1DCD6"
+                strokeWidth="0.9"
+                className={styles.commitCore}
+                style={{ color: b.color }}
+              />
+              <circle cx={cx} cy={c.y} r="1.6" fill="#0D1310" pointerEvents="none" />
               <text x={cx + 14} y={c.y + 3.5} className={styles.commitHash}>
                 {c.hash}
               </text>
-
+              <circle
+                cx={cx}
+                cy={c.y}
+                r="14"
+                fill="transparent"
+                className={styles.commitHit}
+                onClick={() => handleClick(c)}
+                onMouseEnter={() => handleEnter(c.id)}
+                onMouseLeave={handleLeave}
+              />
               {isHovered && (
-                <g className={styles.commitTooltip} transform={`translate(${cx + 70}, ${c.y - 28})`}>
+                <g
+                  className={styles.commitTooltip}
+                  transform={`translate(${cx + 70}, ${c.y - 28})`}
+                >
                   <rect
                     x="0"
                     y="0"
@@ -286,11 +516,17 @@ export default function DummyTree({ onCommitClick }) {
                     height="40"
                     rx="2"
                     fill="#131D18"
-                    stroke="#CFAF63"
-                    strokeOpacity="0.6"
-                    strokeWidth="0.5"
+                    stroke={b.color}
+                    strokeOpacity="0.7"
+                    strokeWidth="0.6"
                   />
-                  <text x="8" y="14" fontSize="9" fontFamily="'Fira Code', monospace" fill="#CFAF63">
+                  <text
+                    x="8"
+                    y="14"
+                    fontSize="9"
+                    fontFamily="'Fira Code', monospace"
+                    fill={b.color}
+                  >
                     {c.hash}
                   </text>
                   <text
@@ -303,7 +539,13 @@ export default function DummyTree({ onCommitClick }) {
                   >
                     {c.msg.length > 28 ? c.msg.slice(0, 26) + "…" : c.msg}
                   </text>
-                  <text x="8" y="37" fontSize="7" fontFamily="'Fira Code', monospace" fill="#5C7065">
+                  <text
+                    x="8"
+                    y="37"
+                    fontSize="7"
+                    fontFamily="'Fira Code', monospace"
+                    fill="#5C7065"
+                  >
                     by {c.author}
                   </text>
                 </g>
@@ -319,13 +561,13 @@ export default function DummyTree({ onCommitClick }) {
             fill="none"
             stroke="#2E8B57"
             strokeWidth="1.2"
-            strokeOpacity="0.18"
+            strokeOpacity="0.25"
             strokeLinecap="round"
           />
         ))}
 
         <text x="420" y="978" className={styles.legend}>
-          20 commits · 5 branches · 4 grafts
+          20 commits · 5 branches · 4 grafts · 1 chronicle
         </text>
       </svg>
     </div>

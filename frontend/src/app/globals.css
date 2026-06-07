@@ -14,6 +14,11 @@
   --autumn: #CD853F;
   --amber: #B8860B;
   --crimson: #8B0000;
+
+  --moonlight: #E8DDA8;
+  --moonlight-soft: #C7B97E;
+  --twilight: #1B2A35;
+  --mist: #B8C4C8;
 }
 
 html,
@@ -31,13 +36,64 @@ body {
 }
 
 @keyframes goldPulse {
-  0% {
-    filter: drop-shadow(0 0 2px var(--gold)) drop-shadow(0 0 4px var(--gold));
+  0%,
+  100% {
+    filter: drop-shadow(0 0 2px var(--gold)) drop-shadow(0 0 5px var(--gold));
   }
   50% {
-    filter: drop-shadow(0 0 6px var(--gold)) drop-shadow(0 0 12px rgba(207, 175, 99, 0.6));
+    filter: drop-shadow(0 0 8px var(--gold)) drop-shadow(0 0 16px rgba(207, 175, 99, 0.7));
+  }
+}
+
+@keyframes goldPulseStrong {
+  0%,
+  100% {
+    opacity: 0.35;
+    filter: drop-shadow(0 0 4px var(--gold)) drop-shadow(0 0 10px var(--gold));
+  }
+  50% {
+    opacity: 0.9;
+    filter: drop-shadow(0 0 14px var(--gold)) drop-shadow(0 0 24px rgba(207, 175, 99, 0.85));
+  }
+}
+
+@keyframes rayDrift {
+  0%,
+  100% {
+    opacity: 0.18;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0.32;
+    transform: translateX(8px);
+  }
+}
+
+@keyframes moteFall {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  10% {
+    opacity: 0.9;
+  }
+  90% {
+    opacity: 0.9;
   }
   100% {
-    filter: drop-shadow(0 0 2px var(--gold)) drop-shadow(0 0 4px var(--gold));
+    opacity: 0;
+    transform: translateY(200px);
+  }
+}
+
+@keyframes auroraShift {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: translateX(0) scaleY(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: translateX(20px) scaleY(1.1);
   }
 }
