@@ -1,26 +1,80 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-canvas: #0D1310;
+  --color-panel: #131D18;
+  --color-border: #23362C;
+  --color-gold: #CFAF63;
+  --color-body: #D1DCD6;
+  --color-muted: #5C7065;
+
+  --color-emerald: #2E8B57;
+  --color-sky: #4682B4;
+  --color-autumn: #CD853F;
+  --color-amber: #B8860B;
+  --color-crimson: #8B0000;
+
+  --font-serif: Georgia, "Times New Roman", serif;
+  --font-fira: var(--font-fira-code), "Courier New", monospace;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-canvas: #0D1310;
+  --color-panel: #131D18;
+  --color-border: #23362C;
+  --color-gold: #CFAF63;
+  --color-body: #D1DCD6;
+  --color-muted: #5C7065;
+  --color-emerald: #2E8B57;
+  --color-sky: #4682B4;
+  --color-autumn: #CD853F;
+  --color-amber: #B8860B;
+  --color-crimson: #8B0000;
+  --font-serif: Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-fira-code), "Courier New", monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-body);
+  font-family: var(--font-serif);
+}
+
+.text-title {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.text-section {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  color: var(--color-gold);
+}
+
+.text-panel {
+  font-family: var(--font-serif);
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--color-body);
+}
+
+.text-data {
+  font-family: var(--font-fira);
+  font-size: 9.5px;
+  font-weight: 700;
+}
+
+.text-snippet {
+  font-family: var(--font-fira);
+  font-size: 9px;
+  background: #17221C;
+}
+
+.ui-corner-accent {
+  width: 40px;
+  height: 40px;
+  position: absolute;
 }
