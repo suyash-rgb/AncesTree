@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import styles from "./DummyTree.module.css";
 
 const BRANCHES = [
@@ -45,6 +45,10 @@ function seededRandom(seed) {
   };
 }
 
+function r2(n) {
+  return Math.round(n * 100) / 100;
+}
+
 function lastCommitOnBranch(branchId, beforeY) {
   return COMMITS.filter((c) => c.branch === branchId && c.y < beforeY).sort((a, b) => b.y - a.y)[0];
 }
@@ -52,7 +56,7 @@ function lastCommitOnBranch(branchId, beforeY) {
 function vinePathD(points, seed) {
   if (points.length < 2) return "";
   const rand = seededRandom(seed);
-  let d = `M ${points[0].x} ${points[0].y}`;
+  let d = `M ${r2(points[0].x)} ${r2(points[0].y)}`;
   for (let i = 1; i < points.length; i++) {
     const prev = points[i - 1];
     const curr = points[i];
@@ -63,134 +67,126 @@ function vinePathD(points, seed) {
     const c1y = midY;
     const c2x = prev.x + dx * 0.75 - wobble;
     const c2y = midY;
-    d += ` C ${c1x} ${c1y}, ${c2x} ${c2y}, ${curr.x} ${curr.y}`;
+    d += ` C ${r2(c1x)} ${r2(c1y)}, ${r2(c2x)} ${r2(c2y)}, ${r2(curr.x)} ${r2(curr.y)}`;
   }
   return d;
 }
 
 function mergePathD(fromX, fromY, toX, toY) {
   const midX = (fromX + toX) / 2;
-  return `M ${fromX} ${fromY} C ${midX + 60} ${fromY + (toY - fromY) * 0.25}, ${midX - 60} ${fromY + (toY - fromY) * 0.75}, ${toX} ${toY}`;
+  return `M ${r2(fromX)} ${r2(fromY)} C ${r2(midX + 60)} ${r2(fromY + (toY - fromY) * 0.25)}, ${r2(midX - 60)} ${r2(fromY + (toY - fromY) * 0.75)}, ${r2(toX)} ${r2(toY)}`;
 }
 
 function leafPath(cx, cy, size) {
   const s = size;
-  return `M ${cx} ${cy - s} C ${cx + s * 0.7} ${cy - s * 0.3}, ${cx + s * 0.7} ${cy + s * 0.3}, ${cx} ${cy + s} C ${cx - s * 0.7} ${cy + s * 0.3}, ${cx - s * 0.7} ${cy - s * 0.3}, ${cx} ${cy - s} Z`;
+  return `M ${r2(cx)} ${r2(cy - s)} C ${r2(cx + s * 0.7)} ${r2(cy - s * 0.3)}, ${r2(cx + s * 0.7)} ${r2(cy + s * 0.3)}, ${r2(cx)} ${r2(cy + s)} C ${r2(cx - s * 0.7)} ${r2(cy + s * 0.3)}, ${r2(cx - s * 0.7)} ${r2(cy - s * 0.3)}, ${r2(cx)} ${r2(cy - s)} Z`;
 }
 
 function mountainPath(rand, baseY, peaks) {
-  let d = `M -20 ${baseY}`;
+  let d = `M -20 ${r2(baseY)}`;
   let x = 0;
   for (let i = 0; i < peaks; i++) {
     const w = 80 + rand() * 180;
     const h = 40 + rand() * 80;
-    d += ` L ${x + w * 0.3} ${baseY - h * 0.6} L ${x + w * 0.5} ${baseY - h} L ${x + w * 0.7} ${baseY - h * 0.7} L ${x + w} ${baseY}`;
+    d += ` L ${r2(x + w * 0.3)} ${r2(baseY - h * 0.6)} L ${r2(x + w * 0.5)} ${r2(baseY - h)} L ${r2(x + w * 0.7)} ${r2(baseY - h * 0.7)} L ${r2(x + w)} ${r2(baseY)}`;
     x += w;
   }
-  d += ` L ${SVG_WIDTH + 20} ${baseY} L ${SVG_WIDTH + 20} ${SVG_HEIGHT} L -20 ${SVG_HEIGHT} Z`;
+  d += ` L ${SVG_WIDTH + 20} ${r2(baseY)} L ${SVG_WIDTH + 20} ${SVG_HEIGHT} L -20 ${SVG_HEIGHT} Z`;
   return d;
 }
 
 function treeCanopyPath() {
   let d = `M -20 0`;
   for (let x = 0; x < SVG_WIDTH + 20; x += 35) {
-    const bump = 20 + Math.abs(Math.sin(x * 0.013)) * 25;
-    d += ` Q ${x + 17} ${bump} ${x + 35} 0`;
+    const sinVal = Math.abs(Math.sin(x * 0.013));
+    const bump = r2(20 + sinVal * 25);
+    d += ` Q ${r2(x + 17)} ${bump} ${r2(x + 35)} 0`;
   }
   d += ` L ${SVG_WIDTH + 20} 0 L ${SVG_WIDTH + 20} -10 L -20 -10 Z`;
   return d;
 }
 
+const BACKGROUND_STARS = (() => {
+  const rand = seededRandom(7777);
+  return Array.from({ length: 70 }, () => ({
+    x: r2(rand() * SVG_WIDTH),
+    y: r2(rand() * 200),
+    r: r2(rand() * 0.8 + 0.3),
+    o: r2(0.4 + rand() * 0.5),
+  }));
+})();
+
+const DUST_MOTES = (() => {
+  const rand = seededRandom(5555);
+  return Array.from({ length: 80 }, () => ({
+    x: r2(rand() * SVG_WIDTH),
+    y: r2(rand() * SVG_HEIGHT),
+    r: r2(rand() * 1.2 + 0.3),
+    delay: r2(rand() * 6),
+  }));
+})();
+
+const GOD_RAYS = [
+  { x: 200, w: 140, delay: 0, o: 0.32 },
+  { x: 480, w: 110, delay: 1.5, o: 0.28 },
+  { x: 760, w: 180, delay: 0.8, o: 0.35 },
+  { x: 1080, w: 130, delay: 2.2, o: 0.3 },
+  { x: 1340, w: 160, delay: 1.0, o: 0.28 },
+];
+
+const WATERFALL_DROPLETS = (() => {
+  const rand = seededRandom(3333);
+  const cx = 1340;
+  return Array.from({ length: 60 }, () => ({
+    x: r2(cx + (rand() - 0.5) * 70),
+    y: r2(rand() * (SVG_HEIGHT - 100)),
+    r: r2(rand() * 1.5 + 0.4),
+    delay: r2(rand() * 4),
+    o: r2(0.6 + rand() * 0.4),
+  }));
+})();
+
+const LEAVES = (() => {
+  const rand = seededRandom(2222);
+  return Array.from({ length: 50 }, () => ({
+    x: r2(rand() * SVG_WIDTH),
+    y: r2(rand() * SVG_HEIGHT),
+    r: r2(rand() * 2 + 1.2),
+    rot: Math.round(rand() * 360),
+    delay: r2(rand() * 8),
+    hue: rand() > 0.5 ? "#2E8B57" : "#4682B4",
+  }));
+})();
+
+const MOUNTAINS_BACK = (() => {
+  const rand = seededRandom(1111);
+  return mountainPath(rand, 380, 14);
+})();
+
+const MOUNTAINS_FRONT = (() => {
+  const rand = seededRandom(2223);
+  return mountainPath(rand, 460, 18);
+})();
+
+const TREE_CANOPY = treeCanopyPath();
+
+const ROOT_TENDRILS = (() => {
+  const rand = seededRandom(9999);
+  return Array.from({ length: 14 }, (_, i) => {
+    const baseX = (i / 14) * SVG_WIDTH + 40;
+    return `M ${r2(baseX)} ${SVG_HEIGHT - 30} Q ${r2(baseX + (rand() - 0.5) * 40)} ${SVG_HEIGHT - 15} ${r2(baseX + (rand() - 0.5) * 60)} ${SVG_HEIGHT + 10}`;
+  });
+})();
+
+const VINE_PATHS = BRANCHES.map((b) => {
+  const branchCommits = COMMITS.filter((c) => c.branch === b.id).sort((a, c) => a.y - c.y);
+  if (branchCommits.length < 2) return null;
+  const points = branchCommits.map((c) => ({ x: b.vx, y: c.y }));
+  return vinePathD(points, b.vx * 13);
+});
+
 export default function DummyTree({ onCommitClick }) {
   const [hovered, setHovered] = useState(null);
-
-  const branches = useMemo(
-    () => BRANCHES.map((b) => ({ ...b, vx: b.x * SVG_WIDTH })),
-    []
-  );
-
-  const backgroundStars = useMemo(() => {
-    const rand = seededRandom(7777);
-    return Array.from({ length: 70 }, () => ({
-      x: rand() * SVG_WIDTH,
-      y: rand() * 200,
-      r: rand() * 0.8 + 0.3,
-      o: 0.4 + rand() * 0.5,
-    }));
-  }, []);
-
-  const dustMotes = useMemo(() => {
-    const rand = seededRandom(5555);
-    return Array.from({ length: 80 }, () => ({
-      x: rand() * SVG_WIDTH,
-      y: rand() * SVG_HEIGHT,
-      r: rand() * 1.2 + 0.3,
-      delay: rand() * 6,
-    }));
-  }, []);
-
-  const godRays = useMemo(() => {
-    return [
-      { x: 200, w: 140, delay: 0, o: 0.32 },
-      { x: 480, w: 110, delay: 1.5, o: 0.28 },
-      { x: 760, w: 180, delay: 0.8, o: 0.35 },
-      { x: 1080, w: 130, delay: 2.2, o: 0.3 },
-      { x: 1340, w: 160, delay: 1.0, o: 0.28 },
-    ];
-  }, []);
-
-  const waterfallDroplets = useMemo(() => {
-    const rand = seededRandom(3333);
-    const cx = 1340;
-    return Array.from({ length: 60 }, () => ({
-      x: cx + (rand() - 0.5) * 70,
-      y: rand() * (SVG_HEIGHT - 100),
-      r: rand() * 1.5 + 0.4,
-      delay: rand() * 4,
-      o: 0.6 + rand() * 0.4,
-    }));
-  }, []);
-
-  const leaves = useMemo(() => {
-    const rand = seededRandom(2222);
-    return Array.from({ length: 50 }, () => ({
-      x: rand() * SVG_WIDTH,
-      y: rand() * SVG_HEIGHT,
-      r: rand() * 2 + 1.2,
-      rot: rand() * 360,
-      delay: rand() * 8,
-      hue: rand() > 0.5 ? "#2E8B57" : "#4682B4",
-    }));
-  }, []);
-
-  const mountainsBack = useMemo(() => {
-    const rand = seededRandom(1111);
-    return mountainPath(rand, 380, 14);
-  }, []);
-
-  const mountainsFront = useMemo(() => {
-    const rand = seededRandom(2223);
-    return mountainPath(rand, 460, 18);
-  }, []);
-
-  const treeCanopy = useMemo(() => treeCanopyPath(), []);
-
-  const rootTendrils = useMemo(() => {
-    const rand = seededRandom(9999);
-    return Array.from({ length: 14 }, (_, i) => {
-      const baseX = (i / 14) * SVG_WIDTH + 40;
-      return `M ${baseX} ${SVG_HEIGHT - 30} Q ${baseX + (rand() - 0.5) * 40} ${SVG_HEIGHT - 15} ${baseX + (rand() - 0.5) * 60} ${SVG_HEIGHT + 10}`;
-    });
-  }, []);
-
-  const vinePaths = useMemo(() => {
-    return branches.map((b) => {
-      const branchCommits = COMMITS.filter((c) => c.branch === b.id).sort((a, c) => a.y - c.y);
-      if (branchCommits.length < 2) return null;
-      const points = branchCommits.map((c) => ({ x: b.vx, y: c.y }));
-      return vinePathD(points, b.vx * 13);
-    });
-  }, [branches]);
 
   const handleClick = useCallback(
     (commit) => {
@@ -273,7 +269,7 @@ export default function DummyTree({ onCommitClick }) {
             <stop offset="100%" stopColor="#0a1410" stopOpacity="0" />
           </linearGradient>
 
-          {branches.map((b) => (
+          {BRANCHES.map((b) => (
             <radialGradient key={b.id} id={`node-${b.id}`} cx="40%" cy="35%" r="65%">
               <stop offset="0%" stopColor={b.color} stopOpacity="1" />
               <stop offset="60%" stopColor={b.color} stopOpacity="0.95" />
@@ -281,7 +277,7 @@ export default function DummyTree({ onCommitClick }) {
             </radialGradient>
           ))}
 
-          {branches.map((b) => (
+          {BRANCHES.map((b) => (
             <radialGradient key={`halo-${b.id}`} id={`halo-${b.id}`} cx="50%" cy="50%" r="50%">
               <stop offset="0%" stopColor={b.color} stopOpacity="0.9" />
               <stop offset="40%" stopColor={b.color} stopOpacity="0.4" />
@@ -318,15 +314,8 @@ export default function DummyTree({ onCommitClick }) {
         <rect width={SVG_WIDTH} height={SVG_HEIGHT} fill="url(#moonlight)" />
         <rect width={SVG_WIDTH} height={SVG_HEIGHT} fill="url(#mist-bottom)" />
 
-        {backgroundStars.map((s, i) => (
-          <circle
-            key={i}
-            cx={s.x}
-            cy={s.y}
-            r={s.r}
-            fill="#FFF1B8"
-            opacity={s.o}
-          />
+        {BACKGROUND_STARS.map((s, i) => (
+          <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#FFF1B8" opacity={s.o} />
         ))}
 
         <ellipse
@@ -339,7 +328,7 @@ export default function DummyTree({ onCommitClick }) {
           className={styles.auroraWave}
         />
 
-        {godRays.map((ray, i) => (
+        {GOD_RAYS.map((ray, i) => (
           <g key={`ray-${i}`} className={styles.godRay} style={{ animationDelay: `${ray.delay}s` }}>
             <polygon
               points={`${ray.x},0 ${ray.x + ray.w},0 ${ray.x + ray.w + 50},${SVG_HEIGHT} ${ray.x - 50},${SVG_HEIGHT}`}
@@ -349,8 +338,8 @@ export default function DummyTree({ onCommitClick }) {
           </g>
         ))}
 
-        <path d={mountainsBack} fill="url(#mountain-back)" />
-        <path d={mountainsFront} fill="url(#mountain-front)" />
+        <path d={MOUNTAINS_BACK} fill="url(#mountain-back)" />
+        <path d={MOUNTAINS_FRONT} fill="url(#mountain-front)" />
 
         <g>
           <rect
@@ -360,7 +349,7 @@ export default function DummyTree({ onCommitClick }) {
             height={SVG_HEIGHT}
             fill="url(#waterfall-grad)"
           />
-          {waterfallDroplets.map((d, i) => (
+          {WATERFALL_DROPLETS.map((d, i) => (
             <circle
               key={`drop-${i}`}
               cx={d.x}
@@ -372,19 +361,12 @@ export default function DummyTree({ onCommitClick }) {
               style={{ animationDelay: `${d.delay}s` }}
             />
           ))}
-          <ellipse
-            cx="1340"
-            cy={SVG_HEIGHT - 20}
-            rx="180"
-            ry="40"
-            fill="#E8F4F8"
-            opacity="0.35"
-          />
+          <ellipse cx="1340" cy={SVG_HEIGHT - 20} rx="180" ry="40" fill="#E8F4F8" opacity="0.35" />
         </g>
 
-        <path d={treeCanopy} fill="url(#canopy-grad)" />
+        <path d={TREE_CANOPY} fill="url(#canopy-grad)" />
 
-        {dustMotes.map((m, i) => (
+        {DUST_MOTES.map((m, i) => (
           <circle
             key={`mote-${i}`}
             cx={m.x}
@@ -397,7 +379,7 @@ export default function DummyTree({ onCommitClick }) {
           />
         ))}
 
-        {leaves.map((l, i) => (
+        {LEAVES.map((l, i) => (
           <g
             key={`leaf-${i}`}
             transform={`translate(${l.x} ${l.y}) rotate(${l.rot})`}
@@ -406,7 +388,7 @@ export default function DummyTree({ onCommitClick }) {
             style={{ animationDelay: `${l.delay}s` }}
           >
             <path
-              d={`M 0 -${l.r} C ${l.r * 0.6} -${l.r * 0.2}, ${l.r * 0.6} ${l.r * 0.2}, 0 ${l.r} C -${l.r * 0.6} ${l.r * 0.2}, -${l.r * 0.6} -${l.r * 0.2}, 0 -${l.r} Z`}
+              d={`M 0 -${l.r} C ${r2(l.r * 0.6)} -${r2(l.r * 0.2)}, ${r2(l.r * 0.6)} ${r2(l.r * 0.2)}, 0 ${l.r} C -${r2(l.r * 0.6)} ${r2(l.r * 0.2)}, -${r2(l.r * 0.6)} -${r2(l.r * 0.2)}, 0 -${l.r} Z`}
               fill={l.hue}
               filter="url(#leaf-shadow)"
             />
@@ -414,13 +396,21 @@ export default function DummyTree({ onCommitClick }) {
         ))}
 
         <line x1="0" y1="100" x2={SVG_WIDTH} y2="100" stroke="#CFAF63" strokeWidth="0.6" strokeOpacity="0.4" />
-        <line x1="0" y1={SVG_HEIGHT - 60} x2={SVG_WIDTH} y2={SVG_HEIGHT - 60} stroke="#CFAF63" strokeWidth="0.6" strokeOpacity="0.4" />
+        <line
+          x1="0"
+          y1={SVG_HEIGHT - 60}
+          x2={SVG_WIDTH}
+          y2={SVG_HEIGHT - 60}
+          stroke="#CFAF63"
+          strokeWidth="0.6"
+          strokeOpacity="0.4"
+        />
 
         <text x={SVG_WIDTH / 2} y="70" className={styles.subtitle}>
           ☼  Lineage of Imladris  ☼
         </text>
 
-        {branches.map((b) => (
+        {BRANCHES.map((b) => (
           <g key={`header-${b.id}`}>
             <text x={b.vx} y="125" className={styles.branchHeader} fill={b.color}>
               {b.label}
@@ -437,8 +427,8 @@ export default function DummyTree({ onCommitClick }) {
           </g>
         ))}
 
-        {branches.map((b, idx) => {
-          const d = vinePaths[idx];
+        {BRANCHES.map((b, idx) => {
+          const d = VINE_PATHS[idx];
           if (!d) return null;
           return (
             <g key={`vine-${b.id}`}>
@@ -456,10 +446,10 @@ export default function DummyTree({ onCommitClick }) {
         })}
 
         {COMMITS.filter((c) => c.merge).map((c) => {
-          const target = branches.find((br) => br.id === c.branch);
+          const target = BRANCHES.find((br) => br.id === c.branch);
           const source = lastCommitOnBranch(c.from, c.y);
           if (!target || !source) return null;
-          const srcBranch = branches.find((br) => br.id === source.branch);
+          const srcBranch = BRANCHES.find((br) => br.id === source.branch);
           if (!srcBranch) return null;
           const d = mergePathD(srcBranch.vx, source.y, target.vx, c.y);
           return (
@@ -477,7 +467,7 @@ export default function DummyTree({ onCommitClick }) {
         })}
 
         {COMMITS.map((c) => {
-          const b = branches.find((br) => br.id === c.branch);
+          const b = BRANCHES.find((br) => br.id === c.branch);
           if (!b) return null;
           const cx = b.vx;
           const isMerge = c.merge;
@@ -490,7 +480,7 @@ export default function DummyTree({ onCommitClick }) {
                   cx={cx}
                   cy={c.y}
                   r="22"
-                  fill={`url(#merge-gold-halo)`}
+                  fill="url(#merge-gold-halo)"
                   className={styles.mergeGlow}
                   opacity="0.55"
                 />
@@ -663,7 +653,7 @@ export default function DummyTree({ onCommitClick }) {
           );
         })}
 
-        {rootTendrils.map((d, i) => (
+        {ROOT_TENDRILS.map((d, i) => (
           <path
             key={`root-${i}`}
             d={d}
